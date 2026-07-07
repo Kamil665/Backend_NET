@@ -1,99 +1,157 @@
-```markdown
 # MyBackend
 
-Простой, но хорошо структурированный REST API бэкенд на **ASP.NET Core**.
+REST API для управления пользователями, разработанный на **ASP.NET Core Web API** с использованием **Entity Framework Core**, **AutoMapper** и **SQL Server**.
+
+Проект демонстрирует построение чистой архитектуры приложения с разделением бизнес-логики, моделей, DTO и слоя доступа к данным.
 
 ---
 
-## О проекте
+# Возможности
 
-Это учебный/стартовый проект backend-приложения с реализацией CRUD операций для пользователей.
-
-### Используемые технологии
-
-- **ASP.NET Core Web API**
-- **Entity Framework Core** + SQL Server
-- **AutoMapper**
-- **Swagger (OpenAPI)**
-- **BCrypt.Net-Next** — хэширование паролей
-- **Clean Architecture** элементы (DTO, Service Layer, Mapping)
+- CRUD операции для пользователей
+- Soft Delete
+- Валидация входящих данных
+- Хэширование паролей (BCrypt)
+- Использование DTO
+- AutoMapper
+- Swagger/OpenAPI
+- Сервисный слой (Service Layer)
+- Entity Framework Core
+- SQL Server
 
 ---
 
-## Структура проекта
+# Стек технологий
+
+| Технология | Версия |
+|------------|---------|
+| .NET | 10 |
+| ASP.NET Core Web API | 10 |
+| Entity Framework Core | 10.0.9 |
+| SQL Server | LocalDB / SQL Server |
+| AutoMapper | Latest |
+| BCrypt.Net-Next | Latest |
+| Swagger (Swashbuckle) | Latest |
+
+---
+
+# Структура проекта
 
 ```
-MyBackend/
-├── Controllers/          # API контроллеры
-├── DTOs/                 # Data Transfer Objects
-├── Data/                 # DbContext + конфигурация
-├── Models/               # Сущности базы данных (Entities)
-├── Mappings/             # AutoMapper профили
-├── Services/             # Бизнес-логика (интерфейсы + реализации)
-├── appsettings.json
+MyBackend
+│
+├── Controllers/
+│   └── UsersController.cs
+│
+├── Data/
+│   ├── ApplicationDbContext.cs
+│   └── Configurations/
+│
+├── DTOs/
+│   ├── CreateUserDto.cs
+│   ├── UpdateUserDto.cs
+│   └── UserDto.cs
+│
+├── Mappings/
+│   └── MappingProfile.cs
+│
+├── Models/
+│   └── User.cs
+│
+├── Services/
+│   ├── Interfaces/
+│   └── Implementations/
+│
 ├── Program.cs
+├── appsettings.json
 └── README.md
 ```
 
 ---
 
-## Как запустить проект локально
+# Запуск проекта
 
-### 1. Клонирование
+## 1. Клонировать репозиторий
 
 ```bash
-git clone https://github.com/твойusername/MyBackend.git
+git clone https://github.com/<username>/MyBackend.git
+
 cd MyBackend
 ```
 
-### 2. Восстановление пакетов
+---
+
+## 2. Восстановить зависимости
 
 ```bash
 dotnet restore
 ```
 
-### 3. Настройка подключения к базе
+---
 
-Отредактируй строку подключения в `appsettings.json`:
+## 3. Настроить подключение к базе данных
+
+В файле **appsettings.json**:
 
 ```json
 {
   "ConnectionStrings": {
-    "DefaultConnection": "Server=(localdb)\\mssqllocaldb;Database=MyBackendDb;Trusted_Connection=True;MultipleActiveResultSets=true"
+    "DefaultConnection": "Server=(localdb)\\MSSQLLocalDB;Database=MyBackendDb;Trusted_Connection=True;MultipleActiveResultSets=true"
   }
 }
 ```
 
-### 4. Применение миграций и создание базы
+---
+
+## 4. Применить миграции
 
 ```bash
 dotnet ef database update
 ```
 
-### 5. Запуск
+---
+
+## 5. Запустить приложение
 
 ```bash
 dotnet run
 ```
 
-После запуска перейдите по ссылке:  
-**`https://localhost:7117/swagger`** (порт может отличаться)
+После запуска Swagger будет доступен по адресу
+
+```
+https://localhost:7117/swagger
+```
+
+> Порт может отличаться в зависимости от настроек проекта.
 
 ---
 
-## Доступные эндпоинты
+# API
 
-| Метод   | Эндпоинт                  | Описание                        |
-|---------|---------------------------|---------------------------------|
-| GET     | `/api/Users`              | Получить всех пользователей     |
-| GET     | `/api/Users/{id}`         | Получить пользователя по ID     |
-| POST    | `/api/Users`              | Создать нового пользователя     |
-| PUT     | `/api/Users/{id}`         | Обновить данные пользователя    |
-| DELETE  | `/api/Users/{id}`         | Удалить пользователя (soft delete) |
+## Получение всех пользователей
+
+```
+GET /api/users
+```
 
 ---
 
-## Пример создания пользователя (POST)
+## Получение пользователя
+
+```
+GET /api/users/{id}
+```
+
+---
+
+## Создание пользователя
+
+```
+POST /api/users
+```
+
+Пример запроса
 
 ```json
 {
@@ -105,47 +163,86 @@ dotnet run
 
 ---
 
-## Основные возможности
+## Обновление пользователя
 
-- Полное разделение Entity и DTO
-- Soft Delete (не удаляет из базы, а помечает как неактивного)
-- Автоматическое маппирование через AutoMapper
-- Валидация и Swagger-документация
-- Готов к расширению (добавление новых сущностей)
+```
+PUT /api/users/{id}
+```
 
 ---
 
-## Как добавить миграцию (при изменении моделей)
+## Удаление пользователя (Soft Delete)
+
+```
+DELETE /api/users/{id}
+```
+
+---
+
+# Особенности реализации
+
+✔ Разделение Entity и DTO
+
+✔ Service Layer
+
+✔ AutoMapper
+
+✔ Soft Delete
+
+✔ BCrypt для хранения паролей
+
+✔ Dependency Injection
+
+✔ Entity Framework Core
+
+✔ Swagger
+
+✔ Готовность к масштабированию
+
+---
+
+# Добавление новой миграции
 
 ```bash
-dotnet ef migrations add НазваниеМиграции
+dotnet ef migrations add MigrationName
+```
+
+Применение миграции
+
+```bash
 dotnet ef database update
 ```
 
 ---
 
-## Технологический стек
+# Возможные улучшения
 
-- .NET 10
-- Microsoft.EntityFrameworkCore.SqlServer 10.0.9
-- AutoMapper
-- BCrypt.Net-Next
-
----
-
-**Готов к развитию** — можно добавлять аутентификацию (JWT), роли, другие сущности и т.д.
-
----
-
-Если есть вопросы или предложения по улучшению проекта — создавай Issue.
-
----
-
-**Создано:** Июль 2026
-```
+- JWT Authentication
+- Refresh Token
+- Identity
+- Authorization
+- Roles
+- Global Exception Middleware
+- Logging
+- Repository Pattern
+- Unit Tests
+- Docker
+- CI/CD
+- Pagination
+- Filtering
+- Search
+- FluentValidation
 
 ---
 
-Скопируй весь текст выше и создай файл `README.md` в корне проекта.
+# Лицензия
 
-Хочешь добавить что-то ещё (например, скриншоты, раздел "TODO", информацию о лицензии и т.д.)?
+Проект распространяется в образовательных целях.
+
+---
+
+## Автор
+
+**Июль 2026**
+
+Разработано как учебный проект для изучения ASP.NET Core Web API, Entity Framework Core и построения REST API.
